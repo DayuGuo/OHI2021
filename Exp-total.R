@@ -1,14 +1,20 @@
-OHI_GDP = left_join(OHI_GDP,副本A_4_1_2, by = "country")
+library(readxl)
+Exp <- read_excel("Exp.xlsx")
+library(readr)
+OHI一级指标 <- read_csv("OHI一级指标.csv")
 
-
-
-OHI_GDP <- read_csv("OHI.GDP.csv")
 library(tidyverse)
 library(cowplot)
 library(colorspace)
 library(ggrepel)
 
-test <- OHI_GDP %>%
+data = left_join(OHI一级指标,Exp, by = "country")
+
+
+
+
+
+test <- data %>%
   mutate(
     region = case_when(
       region == "Middle East and North Africa" ~ "Middle East\nand North Africa",
@@ -34,7 +40,7 @@ test <- test %>%
   )
 
 
-ggplot(test, aes(GDP, OHI)) +
+ggplot(test, aes(exp, total)) +
   geom_smooth(method="lm", formula = 'y ~ poly(x,2)' , col="black") +
   geom_point(
     aes(color = region, fill = region),
@@ -52,6 +58,6 @@ ggplot(test, aes(GDP, OHI)) +
     max.overlaps = 1000,
     seed = 7654 # For reproducibility reasons
   ) +
-  xlab("GDP") +
+  xlab("Life Expec") +
   ylab("One Health Index")+
   theme_test() 
